@@ -1,0 +1,17 @@
+{
+  "name": "@dylanjs/static",
+  "version": "0.1.0",
+  "description": "Middleware for Dylan which serves static assets.",
+  "license": "MIT",
+  "keywords": [
+    "middleware",
+    "dylan"
+  ],
+  "repository": "dylanjs/static",
+  "author": "Shane Thacker <shane@steadymade.com>",
+  "main": "./index",
+  "dependencies": {
+    "mime": "1.3.4",
+    "traversy": "0.0.2"
+  }
+}
