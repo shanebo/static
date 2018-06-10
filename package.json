@@ -1,5 +1,5 @@
 {
-  "name": "@dylanjs/static",
+  "name": "@dylan/static",
   "version": "0.1.0",
   "description": "Middleware for Dylan which serves static assets.",
   "license": "MIT",
