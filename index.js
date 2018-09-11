@@ -19,7 +19,7 @@ module.exports = (dir) => {
         'Cache-Control': 'max-age=31536000, public',
         'Content-Encoding': 'gzip',
         'Content-Length': buffer.length,
-        'Content-Type': mime.lookup(path),
+        'Content-Type': mime.getType(path),
         // 'Last-Modified': mtime,
         // Expires: Mon, 25 Jun 2013 21:31:12 GMT
         'Vary': 'Accept-Encoding'
