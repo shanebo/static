@@ -52,3 +52,51 @@ module.exports = (dir, wait = 0) => {
     }
   }
 }
+
+
+// const { resolve, join } = require('path');
+
+// module.exports = (dir, cacheOn = true) => {
+//   const cache = {};
+//   const root = resolve(dir);
+//   const filterNonDotFiles = '\/[^\.][^\/]+$';
+
+//   if (cacheOn) {
+//     traversy(root, filterNonDotFiles, (path) => {
+//       const keyRegex = new RegExp(`^${root}`);
+//       const key = path.replace(keyRegex, '');
+//       cache[key] = buildAsset(path);
+//     });
+//   }
+
+//   return (req, res, next) => {
+//     const asset = cache[req.pathname];
+
+//     if (req.method !== 'GET' || req.pathname === '/') {
+//       next();
+//       return;
+//     }
+
+//     if (asset) {
+//       asset.headers.Date = new Date().toUTCString();
+//       res.writeHead(200, asset.headers);
+//       res.end(asset.buffer);
+//     } else if (!cacheOn) {
+//       const filePath = join(root, req.pathname);
+
+//       if (fs.existsSync(filePath)) {
+//         res
+//           .status(200)
+//           .set('Cache-Control', 'no-cache')
+//           .set('Date', new Date().toUTCString())
+//           .set('Content-Type', mime.getType(req.pathname));
+
+//         fs.createReadStream(filePath).pipe(res);
+//       } else {
+//         next();
+//       }
+//     } else {
+//       next();
+//     }
+//   }
+// }
