@@ -5,13 +5,15 @@ const zlib = require('zlib');
 const { resolve } = require('path');
 
 
-const buildAsset = (path, browserCaching = true) => {
+const buildAsset = (path, cacheControl) => {
   const body = fs.readFileSync(path);
   const buffer = zlib.gzipSync(body);
   return {
     buffer,
     headers: {
-      'Cache-Control': browserCaching ? 'max-age=31536000, public' : 'no-cache',
+      ...cacheControl && {
+        'Cache-Control': cacheControl
+      },
       'Content-Encoding': 'gzip',
       'Content-Length': buffer.length,
       'Content-Type': mime.getType(path),
@@ -22,23 +24,23 @@ const buildAsset = (path, browserCaching = true) => {
   };
 }
 
-const cacheAssets = (root, cache, browserCaching) => {
+const cacheAssets = (root, cache, cacheControl) => {
   const filterNonDotFiles = '\/[^\.][^\/]+$';
 
   traversy(root, filterNonDotFiles, (path) => {
     const keyRegex = new RegExp(`^${root}`);
     const key = path.replace(keyRegex, '');
-    cache[key] = buildAsset(path, browserCaching);
+    cache[key] = buildAsset(path, cacheControl);
   });
 }
 
-module.exports = (dir, wait = 0) => {
+module.exports = (dir, cacheControl, buildWait = 0) => {
   const cache = {};
   const root = resolve(dir);
 
-  wait
-    ? setTimeout(cacheAssets.bind(null, root, cache, false), wait)
-    : cacheAssets(root, cache, true);
+  buildWait
+    ? setTimeout(cacheAssets.bind(null, root, cache, cacheControl), buildWait)
+    : cacheAssets(root, cache, cacheControl);
 
   return (req, res, next) => {
     const asset = cache[req.pathname];
