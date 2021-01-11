@@ -34,7 +34,7 @@ const cacheAssets = (root, cache, cacheControl) => {
   });
 }
 
-module.exports = (dir, { cacheControl, buildWait, subdomain }) => {
+module.exports = (dir, { cacheControl, buildWait }) => {
   const cache = {};
   const root = resolve(dir);
 
@@ -44,10 +44,7 @@ module.exports = (dir, { cacheControl, buildWait, subdomain }) => {
 
   return (req, res, next) => {
     const asset = cache[req.pathname];
-    const reqSubdomain = req.hostname.split('.')[0];
-    const needsServing = req.method === 'GET'
-      && asset
-      && (asset.headers['Content-Type'] === 'image/svg+xml' || !subdomain || reqSubdomain === subdomain);
+    const needsServing = req.method === 'GET' && asset;
 
     if (needsServing) {
       asset.headers.Date = new Date().toUTCString();
