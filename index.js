@@ -17,7 +17,6 @@ const buildAsset = (path, cacheControl) => {
       'Content-Encoding': 'gzip',
       'Content-Length': buffer.length,
       'Content-Type': mime.getType(path),
-      'Vary': 'Accept-Encoding'
       // 'Last-Modified': fs.statSync(path).mtime.toUTCString(),
       // Expires: Mon, 25 Jun 2013 21:31:12 GMT
     }
@@ -47,6 +46,8 @@ module.exports = (dir, { cacheControl, buildWait }) => {
     const needsServing = req.method === 'GET' && asset;
 
     if (needsServing) {
+      const vary = res.get('Vary');
+      asset.headers.Vary = vary ? `Accept-Encoding, ${vary}` : 'Accept-Encoding';
       asset.headers.Date = new Date().toUTCString();
       res.writeHead(200, asset.headers);
       res.end(asset.buffer);
