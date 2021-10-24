@@ -1,0 +1,17 @@
+{
+  "name": "@dylan/static",
+  "version": "0.1.4",
+  "description": "Middleware for Dylan which serves static assets.",
+  "license": "MIT",
+  "keywords": [
+    "middleware",
+    "dylan"
+  ],
+  "repository": "shanebo/static",
+  "author": "Shane Thacker <shane@steadymade.com>",
+  "main": "./index",
+  "dependencies": {
+    "mime": "2.3.1",
+    "traversy": "0.0.2"
+  }
+}
