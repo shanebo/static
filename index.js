@@ -16,9 +16,7 @@ const buildAsset = (path, cacheControl) => {
       },
       'Content-Encoding': 'gzip',
       'Content-Length': buffer.length,
-      'Content-Type': mime.getType(path),
-      // 'Last-Modified': fs.statSync(path).mtime.toUTCString(),
-      // Expires: Mon, 25 Jun 2013 21:31:12 GMT
+      'Content-Type': mime.getType(path)
     }
   };
 }
