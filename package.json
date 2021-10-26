@@ -1,6 +1,6 @@
 {
   "name": "@dylan/static",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "Middleware for Dylan which serves static assets.",
   "license": "MIT",
   "keywords": [
