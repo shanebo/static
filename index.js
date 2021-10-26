@@ -2,7 +2,7 @@ const fs = require('fs');
 const traversy = require('traversy');
 const mime = require('mime');
 const zlib = require('zlib');
-const { resolve } = require('path');
+const { join, resolve } = require('path');
 
 
 const buildAsset = (path, cacheControl) => {
@@ -31,26 +31,44 @@ const cacheAssets = (root, cache, cacheControl) => {
   });
 }
 
-module.exports = (dir, { cacheControl, buildWait }) => {
+module.exports = (dir, { cacheControl }) => {
   const cache = {};
   const root = resolve(dir);
+  const notDev = process.env.NODE_ENV !== 'development';
 
-  buildWait
-    ? setTimeout(cacheAssets.bind(null, root, cache, cacheControl), buildWait || 0)
-    : cacheAssets(root, cache, cacheControl);
+  if (notDev) {
+    cacheAssets(root, cache, cacheControl);
+  }
 
   return (req, res, next) => {
-    const asset = cache[req.pathname];
-    const needsServing = req.method === 'GET' && asset;
+    const { method, pathname } = req;
 
-    if (needsServing) {
-      const vary = res.get('Vary');
-      asset.headers.Vary = vary ? `Accept-Encoding, ${vary}` : 'Accept-Encoding';
-      asset.headers.Date = new Date().toUTCString();
-      res.writeHead(200, asset.headers);
-      res.end(asset.buffer);
-    } else {
+    if (method !== 'GET') {
       next();
+    } else if (notDev) {
+      const asset = cache[pathname];
+
+      if (asset) {
+        const vary = res.get('Vary');
+        asset.headers.Vary = vary ? `Accept-Encoding, ${vary}` : 'Accept-Encoding';
+        asset.headers.Date = new Date().toUTCString();
+        res.writeHead(200, asset.headers);
+        res.end(asset.buffer);
+      } else {
+        next();
+      }
+    } else {
+      const path = join(root, pathname);
+
+      if (fs.existsSync(path) && fs.lstatSync(path).isFile()) {
+        res.status(200)
+          .set('Date', new Date().toUTCString())
+          .set('Content-Type', mime.getType(pathname))
+          .set('Cache-Control', 'no-cache');
+        fs.createReadStream(path).pipe(res);
+      } else {
+        next();
+      }
     }
   }
 }
