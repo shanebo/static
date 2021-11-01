@@ -11,7 +11,7 @@
   "author": "Shane Thacker <shane@steadymade.com>",
   "main": "./index",
   "dependencies": {
-    "mime": "~2.5.2",
+    "mrmime": "~1.0.0",
     "traversy": "0.0.2"
   }
 }
