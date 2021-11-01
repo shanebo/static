@@ -31,7 +31,7 @@ const cacheAssets = (root, cache, cacheControl) => {
   });
 }
 
-module.exports = (dir, { cacheControl }) => {
+module.exports = (dir, { cacheControl } = {}) => {
   const cache = {};
   const root = resolve(dir);
   const notDev = process.env.NODE_ENV !== 'development';
