@@ -1,6 +1,6 @@
 {
   "name": "@dylan/static",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Middleware for Dylan which serves static assets.",
   "license": "MIT",
   "keywords": [
@@ -11,7 +11,7 @@
   "author": "Shane Thacker <shane@steadymade.com>",
   "main": "./index",
   "dependencies": {
-    "mime": "~2.5.2",
+    "mrmime": "~1.0.0",
     "traversy": "0.0.2"
   }
 }
