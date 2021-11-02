@@ -1,6 +1,6 @@
 const fs = require('fs');
 const traversy = require('traversy');
-const mime = require('mime');
+const mime = require('mrmime');
 const zlib = require('zlib');
 const { join, resolve } = require('path');
 
@@ -16,7 +16,7 @@ const buildAsset = (path, cacheControl) => {
       },
       'Content-Encoding': 'gzip',
       'Content-Length': buffer.length,
-      'Content-Type': mime.getType(path)
+      'Content-Type': mime.lookup(path)
     }
   };
 }
@@ -63,7 +63,7 @@ module.exports = (dir, { cacheControl } = {}) => {
       if (fs.existsSync(path) && fs.lstatSync(path).isFile()) {
         res.status(200)
           .set('Date', new Date().toUTCString())
-          .set('Content-Type', mime.getType(pathname))
+          .set('Content-Type', mime.lookup(pathname))
           .set('Cache-Control', 'no-cache');
         fs.createReadStream(path).pipe(res);
       } else {
