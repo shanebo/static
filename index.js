@@ -4,6 +4,7 @@ const mime = require('mrmime');
 const zlib = require('zlib');
 const { join, resolve } = require('path');
 
+mime.mimes.ico = 'image/x-icon';
 
 const buildAsset = (path, cacheControl) => {
   const body = fs.readFileSync(path);
